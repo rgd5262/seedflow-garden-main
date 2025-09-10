@@ -102,7 +102,7 @@ export const YearGrid: React.FC<YearGridProps> = ({ year, allPlans, className, o
         {labelMonths.map((m, idx) => (
           <div key={idx} className="flex items-end justify-center overflow-hidden">
             {m !== -1 && (
-              <span className="text-[10px] text-muted-foreground leading-none whitespace-nowrap text-ellipsis overflow-hidden">
+              <span className="text-[10px] text-muted-foreground leading-none whitespace-nowrap tracking-tight">
                 {getMonthAbbr(m, locale as Locale)}
               </span>
             )}
