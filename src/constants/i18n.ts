@@ -84,9 +84,9 @@ export const STRINGS = {
     not_found_home: 'Return to Home',
   },
   ko: {
-    app_title: '데일리 가든',
-    nav_year_view: '연간 보기',
-    nav_today: '오늘',
+    app_title: 'Daily Garden',
+    nav_year_view: 'Year View',
+    nav_today: 'Today',
     year_overview_title: (year: number) => `${year} 정원 개요`,
     year_overview_subtitle: '월을 클릭해 정원을 가꿔보세요',
     year_summary_completed: '완료 합계',
