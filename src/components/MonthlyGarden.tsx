@@ -8,6 +8,7 @@ interface MonthlyGardenProps {
   plans: Plan[];
   onPlant: (date: number) => void;
   onComplete: (planId: string) => void;
+  onOpenActions?: (plan: Plan) => void;
   className?: string;
 }
 
@@ -17,6 +18,7 @@ const MonthlyGarden: React.FC<MonthlyGardenProps> = ({
   plans,
   onPlant,
   onComplete,
+  onOpenActions,
   className
 }) => {
   const currentDate = new Date();
@@ -92,6 +94,7 @@ const MonthlyGarden: React.FC<MonthlyGardenProps> = ({
                 onPlant={onPlant}
                 onComplete={onComplete}
                 isCurrentMonth={isCurrentMonth}
+                onOpenActions={onOpenActions}
               />
             ) : (
               <div className="aspect-square" /> // Empty cell for spacing

@@ -9,6 +9,7 @@ export type ParcelState = 'empty' | 'planted' | 'completed';
 export interface Plan {
   id: string;
   title: string;
+  description?: string;
   date: string;
   state: ParcelState;
   plantedAt?: Date;
@@ -21,6 +22,7 @@ interface GardenParcelProps {
   onPlant: (date: number) => void;
   onComplete: (planId: string) => void;
   isCurrentMonth: boolean;
+  onOpenActions?: (plan: Plan) => void;
   className?: string;
 }
 
@@ -30,12 +32,20 @@ const GardenParcel: React.FC<GardenParcelProps> = ({
   onPlant,
   onComplete,
   isCurrentMonth,
+  onOpenActions,
   className
 }) => {
   const handleClick = () => {
     if (!plan && isCurrentMonth) {
       onPlant(date);
-    } else if (plan && plan.state === 'planted') {
+      return;
+    }
+    if (plan && onOpenActions) {
+      onOpenActions(plan);
+      return;
+    }
+    // Fallback legacy behavior
+    if (plan && plan.state === 'planted') {
       onComplete(plan.id);
     }
   };
@@ -79,7 +89,7 @@ const GardenParcel: React.FC<GardenParcelProps> = ({
 
   const getTooltipText = () => {
     if (!plan) return `Plant a seed for ${date}`;
-    if (plan.state === 'planted') return `Complete: ${plan.title}`;
+    if (plan.state === 'planted') return `Plan: ${plan.title}`;
     if (plan.state === 'completed') return `Completed: ${plan.title}`;
     return '';
   };

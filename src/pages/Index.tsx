@@ -4,7 +4,9 @@ import GardenNavigation from '@/components/GardenNavigation';
 import MonthlyGarden from '@/components/MonthlyGarden';
 import YearOverview from '@/components/YearOverview';
 import PlantSeedDialog from '@/components/PlantSeedDialog';
+import PlanActionsDialog from '@/components/PlanActionsDialog';
 import { toast } from '@/hooks/use-toast';
+import type { Plan } from '@/components/GardenParcel';
 
 const Index = () => {
   const currentDate = new Date();
@@ -14,10 +16,15 @@ const Index = () => {
   const [plantDialogOpen, setPlantDialogOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState<number | null>(null);
 
+  const [actionsOpen, setActionsOpen] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
+
   const {
     plans,
     plantSeed,
     completePlan,
+    updatePlan,
+    deletePlan,
     getPlansForMonth,
   } = useGardenData();
 
@@ -55,12 +62,35 @@ const Index = () => {
     }
   };
 
+  const handleOpenActions = (plan: Plan) => {
+    setSelectedPlan(plan);
+    setActionsOpen(true);
+  };
+
   const handleCompletePlan = (planId: string) => {
     completePlan(planId);
     const plan = plans.find(p => p.id === planId);
     toast({
       title: "Plant Bloomed! 🌸",
       description: `Congratulations! You completed "${plan?.title}". Your garden is growing beautifully.`,
+    });
+  };
+
+  const handleUpdatePlan = (planId: string, updates: { title?: string; description?: string; state?: Plan['state'] }) => {
+    updatePlan(planId, updates);
+    const updated = plans.find(p => p.id === planId);
+    toast({
+      title: "Plan Updated",
+      description: `Saved changes${updated?.title ? ` to "${updated.title}"` : ''}.`,
+    });
+  };
+
+  const handleDeletePlan = (planId: string) => {
+    const target = plans.find(p => p.id === planId);
+    deletePlan(planId);
+    toast({
+      title: "Plan Deleted",
+      description: target?.title ? `Removed "${target.title}".` : 'Removed plan.',
     });
   };
 
@@ -95,6 +125,7 @@ const Index = () => {
             plans={currentMonthPlans}
             onPlant={handlePlantSeed}
             onComplete={handleCompletePlan}
+            onOpenActions={handleOpenActions}
           />
         )}
       </main>
@@ -109,6 +140,17 @@ const Index = () => {
         date={selectedDate}
         month={currentMonth}
         year={currentYear}
+      />
+
+      <PlanActionsDialog
+        open={actionsOpen}
+        plan={selectedPlan}
+        onClose={() => {
+          setActionsOpen(false);
+          setSelectedPlan(null);
+        }}
+        onUpdate={handleUpdatePlan}
+        onDelete={handleDeletePlan}
       />
 
       {/* Floating Help Text */}

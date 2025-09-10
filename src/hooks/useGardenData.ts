@@ -41,6 +41,7 @@ export const useGardenData = () => {
     const newPlan: Plan = {
       id: `${dateString}-${Date.now()}`,
       title,
+      description: description || undefined,
       date: dateString,
       state: 'planted',
       plantedAt: new Date(),
@@ -56,6 +57,21 @@ export const useGardenData = () => {
         ? { ...plan, state: 'completed', completedAt: new Date() }
         : plan
     ));
+  };
+
+  const updatePlan = (planId: string, updates: Partial<Pick<Plan, 'title' | 'description' | 'state'>>) => {
+    setPlans(prev => prev.map(plan => {
+      if (plan.id !== planId) return plan;
+      const next: Plan = { ...plan, ...updates };
+      if (updates.state === 'completed' && !plan.completedAt) {
+        next.completedAt = new Date();
+      }
+      if (updates.state === 'planted' && plan.completedAt && plan.state === 'completed') {
+        // Reopen: clear completedAt when moving back to planted
+        next.completedAt = undefined;
+      }
+      return next;
+    }));
   };
 
   const deletePlan = (planId: string) => {
@@ -87,6 +103,7 @@ export const useGardenData = () => {
     plans,
     plantSeed,
     completePlan,
+    updatePlan,
     deletePlan,
     getPlansForMonth,
     getYearStats,
