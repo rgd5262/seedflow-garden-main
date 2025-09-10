@@ -2,6 +2,9 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight, Calendar, BarChart3 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { monthNames } from '@/constants/i18n';
+import { STRINGS, type Locale } from '@/constants/i18n';
+import { useLocale } from '@/components/LanguageSwitcher';
 
 interface GardenNavigationProps {
   currentMonth: number;
@@ -20,10 +23,9 @@ const GardenNavigation: React.FC<GardenNavigationProps> = ({
   onToggleYearView,
   className
 }) => {
-  const monthNames = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
-  ];
+  const { locale } = useLocale();
+  const mNames = monthNames(locale);
+  const S = STRINGS[locale as Locale];
 
   const goToPreviousMonth = () => {
     if (currentMonth === 0) {
@@ -53,7 +55,7 @@ const GardenNavigation: React.FC<GardenNavigationProps> = ({
           {/* Left: App Title */}
           <div className="flex items-center space-x-4">
             <h1 className="text-2xl font-bold text-foreground">
-              🌱 Daily Garden
+              🌱 {S.app_title}
             </h1>
           </div>
 
@@ -72,11 +74,11 @@ const GardenNavigation: React.FC<GardenNavigationProps> = ({
             <div className="text-center min-w-40">
               {showYearView ? (
                 <span className="text-lg font-semibold text-foreground">
-                  {currentYear} Overview
+                  {S.year_overview_title(currentYear)}
                 </span>
               ) : (
                 <span className="text-lg font-semibold text-foreground">
-                  {monthNames[currentMonth]} {currentYear}
+                  {mNames[currentMonth]} {currentYear}
                 </span>
               )}
             </div>
@@ -101,7 +103,7 @@ const GardenNavigation: React.FC<GardenNavigationProps> = ({
               className="flex items-center space-x-1"
             >
               <BarChart3 className="w-4 h-4" />
-              <span className="hidden sm:inline">Year View</span>
+              <span className="hidden sm:inline">{S.nav_year_view}</span>
             </Button>
             
             <Button
@@ -111,7 +113,7 @@ const GardenNavigation: React.FC<GardenNavigationProps> = ({
               className="flex items-center space-x-1"
             >
               <Calendar className="w-4 h-4" />
-              <span className="hidden sm:inline">Today</span>
+              <span className="hidden sm:inline">{S.nav_today}</span>
             </Button>
           </div>
         </div>

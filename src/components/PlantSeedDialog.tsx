@@ -11,6 +11,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import seedIcon from '@/assets/seed.png';
+import { useLocale } from '@/components/LanguageSwitcher';
+import { STRINGS, monthNames, type Locale } from '@/constants/i18n';
 
 interface PlantSeedDialogProps {
   isOpen: boolean;
@@ -31,6 +33,9 @@ const PlantSeedDialog: React.FC<PlantSeedDialogProps> = ({
 }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const { locale } = useLocale();
+  const S = STRINGS[locale as Locale];
+  const mNames = monthNames(locale);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,12 +47,7 @@ const PlantSeedDialog: React.FC<PlantSeedDialogProps> = ({
     }
   };
 
-  const monthNames = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
-  ];
-
-  const formattedDate = date ? `${monthNames[month]} ${date}, ${year}` : '';
+  const formattedDate = date ? `${mNames[month]} ${date}, ${year}` : '';
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -59,21 +59,21 @@ const PlantSeedDialog: React.FC<PlantSeedDialogProps> = ({
             </div>
           </div>
           <DialogTitle className="text-xl font-semibold text-foreground">
-            Plant Your Daily Seed
+            {S.seed_dialog_title}
           </DialogTitle>
           <DialogDescription className="text-muted-foreground">
-            What do you want to accomplish on {formattedDate}?
+            {S.seed_dialog_desc(formattedDate)}
           </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="title" className="text-foreground">
-              Goal Title
+              {S.seed_label_title}
             </Label>
             <Input
               id="title"
-              placeholder="Learn something new, exercise, write..."
+              placeholder={S.seed_placeholder_title}
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               className="bg-seed-dormant border-border text-foreground placeholder:text-muted-foreground"
@@ -84,11 +84,11 @@ const PlantSeedDialog: React.FC<PlantSeedDialogProps> = ({
 
           <div className="space-y-2">
             <Label htmlFor="description" className="text-foreground">
-              Description (optional)
+              {S.seed_label_description}
             </Label>
             <Textarea
               id="description"
-              placeholder="Add more details about your plan..."
+              placeholder={S.seed_placeholder_description}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               className="bg-seed-dormant border-border text-foreground placeholder:text-muted-foreground resize-none"
@@ -103,14 +103,14 @@ const PlantSeedDialog: React.FC<PlantSeedDialogProps> = ({
               onClick={onClose}
               className="flex-1"
             >
-              Cancel
+              {S.seed_btn_cancel}
             </Button>
             <Button
               type="submit"
               className="flex-1 bg-plant-growing hover:bg-plant-highlight text-primary-foreground"
               disabled={!title.trim()}
             >
-              Plant Seed 🌱
+              {S.seed_btn_submit}
             </Button>
           </div>
         </form>

@@ -1,6 +1,8 @@
 import React, { useMemo } from 'react';
 import { cn, formatLocalDateKey } from '@/lib/utils';
 import { Plan } from '@/components/GardenParcel';
+import { MONTHS_SHORT, STRINGS, type Locale } from '@/constants/i18n';
+import { useLocale } from '@/components/LanguageSwitcher';
 
 interface YearGridProps {
   year: number;
@@ -9,12 +11,15 @@ interface YearGridProps {
   onMonthSelect?: (monthIndex: number) => void; // optional navigation
 }
 
-function getMonthAbbr(monthIndex: number): string {
-  const abbr = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+function getMonthAbbr(monthIndex: number, locale: Locale): string {
+  const abbr = MONTHS_SHORT[locale] as readonly string[];
   return abbr[monthIndex] ?? '';
 }
 
 export const YearGrid: React.FC<YearGridProps> = ({ year, allPlans, className, onMonthSelect }) => {
+  const { locale } = useLocale();
+  const S = STRINGS[locale as Locale];
+
   // Map local dateKey -> state/title for O(1) lookup
   const stateByDate = useMemo(() => {
     const map = new Map<string, { state: Plan['state']; title: string }>();
@@ -98,7 +103,7 @@ export const YearGrid: React.FC<YearGridProps> = ({ year, allPlans, className, o
           <div key={idx} className="flex items-end justify-center">
             {m !== -1 && (
               <span className="text-[10px] text-muted-foreground leading-none">
-                {getMonthAbbr(m)}
+                {getMonthAbbr(m, locale as Locale)}
               </span>
             )}
           </div>
@@ -129,11 +134,11 @@ export const YearGrid: React.FC<YearGridProps> = ({ year, allPlans, className, o
 
       {/* Legend */}
       <div className="flex items-center gap-2 mt-3 text-xs text-muted-foreground px-1">
-        <span>Less</span>
+        <span>{S.legend_less}</span>
         <span className="w-3 h-3 rounded-[2px] bg-seed-dormant/40 border border-border/20" />
         <span className="w-3 h-3 rounded-[2px] bg-seed-planted border border-border/20" />
         <span className="w-3 h-3 rounded-[2px] bg-plant-bloomed border border-border/20" />
-        <span>More</span>
+        <span>{S.legend_more}</span>
       </div>
     </div>
   );
