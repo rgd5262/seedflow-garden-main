@@ -1,0 +1,232 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Garden Planning App Design System
+Nature-inspired colors, organic gradients, and plant growth animations
+All colors in HSL format for optimal theming
+*/
+
+@layer base {
+  :root {
+    /* Core Nature Palette */
+    --background: 25 15% 7%; /* Deep soil dark */
+    --foreground: 120 20% 95%; /* Soft white */
+
+    /* Garden Bed System */
+    --garden-soil: 25 15% 7%; /* Main background */
+    --garden-earth: 30 12% 12%; /* Card backgrounds */
+    --garden-earth-foreground: 120 15% 85%;
+
+    /* Plant Growth States */
+    --seed-dormant: 25 8% 15%; /* Empty parcel */
+    --seed-planted: 88 30% 25%; /* Planted state */
+    --plant-growing: 88 50% 45%; /* In progress */
+    --plant-bloomed: 88 65% 55%; /* Completed */
+    --plant-highlight: 88 70% 65%; /* Hover/active */
+
+    /* Accent Colors */
+    --earth-brown: 30 35% 25%;
+    --earth-brown-foreground: 120 15% 90%;
+    
+    --forest-green: 140 40% 35%;
+    --forest-green-foreground: 120 15% 95%;
+
+    /* Seasonal Accents */
+    --spring-bloom: 300 60% 70%; /* Flower accents */
+    --autumn-gold: 45 90% 60%; /* Achievement highlights */
+    --winter-frost: 200 30% 85%; /* Subtle accents */
+
+    /* Interaction States */
+    --hover-glow: 88 60% 50%;
+    --focus-ring: 88 70% 60%;
+    --success: 140 60% 50%;
+    --warning: 45 85% 55%;
+    --destructive: 0 70% 55%;
+
+    /* UI Components */
+    --primary: 88 55% 45%;
+    --primary-foreground: 25 15% 7%;
+    
+    --secondary: 30 20% 20%;
+    --secondary-foreground: 120 15% 85%;
+    
+    --muted: 25 10% 18%;
+    --muted-foreground: 120 10% 65%;
+    
+    --accent: 88 40% 35%;
+    --accent-foreground: 120 15% 90%;
+    
+    --border: 25 15% 25%;
+    --input: 25 15% 18%;
+    --ring: 88 60% 50%;
+
+    /* Design System */
+    --radius: 0.75rem;
+    
+    /* Organic Gradients */
+    --gradient-growth: linear-gradient(135deg, hsl(88 30% 25%), hsl(88 65% 55%));
+    --gradient-earth: linear-gradient(180deg, hsl(25 15% 7%), hsl(30 12% 12%));
+    --gradient-bloom: radial-gradient(circle, hsl(88 70% 65%), hsl(140 40% 35%));
+    --gradient-seasonal: linear-gradient(45deg, hsl(88 55% 45%), hsl(300 60% 70%));
+    
+    /* Garden Shadows */
+    --shadow-seed: 0 2px 8px hsl(25 20% 5% / 0.3);
+    --shadow-plant: 0 4px 20px hsl(88 40% 30% / 0.4);
+    --shadow-bloom: 0 8px 32px hsl(88 60% 40% / 0.5);
+    
+    /* Growth Animations */
+    --transition-growth: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bloom: all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    --transition-organic: all 0.5s cubic-bezier(0.4, 0, 0.6, 1);
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+}
+
+@layer components {
+  /* Garden Parcel Animations */
+  @keyframes growFromSeed {
+    0% { 
+      transform: scale(0.8) translateY(10px);
+      opacity: 0.5;
+    }
+    50% {
+      transform: scale(1.1) translateY(-5px);
+      opacity: 0.8;
+    }
+    100% { 
+      transform: scale(1) translateY(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes bloomPlant {
+    0% { 
+      transform: scale(1);
+      filter: hue-rotate(0deg) brightness(1);
+    }
+    50% {
+      transform: scale(1.15);
+      filter: hue-rotate(15deg) brightness(1.2);
+    }
+    100% { 
+      transform: scale(1.05);
+      filter: hue-rotate(0deg) brightness(1.1);
+    }
+  }
+
+  @keyframes particleFloat {
+    0%, 100% { 
+      transform: translateY(0px) translateX(0px);
+      opacity: 0;
+    }
+    50% { 
+      transform: translateY(-20px) translateX(10px);
+      opacity: 1;
+    }
+  }
+
+  @keyframes gentleSway {
+    0%, 100% { transform: translateX(0px) rotate(0deg); }
+    25% { transform: translateX(2px) rotate(1deg); }
+    75% { transform: translateX(-2px) rotate(-1deg); }
+  }
+
+  /* Parcel States */
+  .parcel-empty {
+    @apply bg-seed-dormant border-2 border-border/30 hover:border-hover-glow/50;
+    @apply transition-all duration-300 cursor-pointer;
+    @apply relative overflow-hidden;
+  }
+
+  .parcel-empty:hover {
+    @apply shadow-[var(--shadow-seed)] scale-105;
+    background: linear-gradient(135deg, hsl(var(--seed-dormant)), hsl(var(--seed-planted) / 0.3));
+  }
+
+  .parcel-planted {
+    @apply bg-seed-planted border-2 border-plant-growing/60;
+    @apply shadow-[var(--shadow-plant)];
+    animation: growFromSeed 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .parcel-completed {
+    @apply bg-plant-bloomed border-2 border-plant-highlight;
+    @apply shadow-[var(--shadow-bloom)];
+    animation: bloomPlant 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .parcel-completed:hover {
+    animation: gentleSway 3s ease-in-out infinite;
+  }
+
+  /* Plant Growth Particles */
+  .growth-particles::after {
+    content: '';
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: hsl(var(--spring-bloom));
+    border-radius: 50%;
+    top: 20%;
+    left: 30%;
+    animation: particleFloat 2s ease-in-out infinite;
+  }
+
+  .growth-particles::before {
+    content: '';
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: hsl(var(--autumn-gold));
+    border-radius: 50%;
+    top: 40%;
+    right: 25%;
+    animation: particleFloat 2.5s ease-in-out infinite 0.5s;
+  }
+
+  /* Garden Grid */
+  .garden-grid {
+    @apply grid gap-2 p-4;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
+
+  @media (max-width: 768px) {
+    .garden-grid {
+      @apply gap-1 p-2;
+      grid-template-columns: repeat(7, minmax(40px, 1fr));
+    }
+  }
+
+  /* Navigation Styles */
+  .garden-nav {
+    @apply bg-garden-earth/90 backdrop-blur-sm border-b border-border;
+    @apply sticky top-0 z-50;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
