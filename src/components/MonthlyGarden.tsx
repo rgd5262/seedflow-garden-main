@@ -2,7 +2,7 @@ import React from 'react';
 import { cn, parseLocalDateKey } from '@/lib/utils';
 import GardenParcel, { Plan } from './GardenParcel';
 import { useLocale } from '@/components/LanguageSwitcher';
-import { monthNames, STRINGS, type Locale } from '@/constants/i18n';
+import { monthNames, STRINGS, weekdays, type Locale } from '@/constants/i18n';
 
 interface MonthlyGardenProps {
   year: number;
@@ -28,6 +28,7 @@ const MonthlyGarden: React.FC<MonthlyGardenProps> = ({
   const { locale } = useLocale();
   const mNames = monthNames(locale);
   const S = STRINGS[locale as Locale];
+  const weekDays = weekdays(locale);
   
   // Generate calendar grid
   const firstDay = new Date(year, month, 1);
@@ -56,8 +57,6 @@ const MonthlyGarden: React.FC<MonthlyGardenProps> = ({
              planDate.getFullYear() === year;
     });
   };
-
-  const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
   const monthHeader = locale === 'ko' ? `${year}년 ${month + 1}월` : `${mNames[month]} ${year}`;
 
