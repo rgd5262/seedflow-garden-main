@@ -1,6 +1,7 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
 import { Plan } from './GardenParcel';
+import YearGrid from './YearGrid';
 
 interface YearOverviewProps {
   year: number;
@@ -37,7 +38,7 @@ const YearOverview: React.FC<YearOverviewProps> = ({
       planted,
       total: monthPlans.length,
       daysInMonth,
-      completionRate: monthPlans.length > 0 ? completed / daysInMonth : 0
+      completionRate: daysInMonth > 0 ? completed / daysInMonth : 0
     };
   };
 
@@ -60,67 +61,50 @@ const YearOverview: React.FC<YearOverviewProps> = ({
         </p>
       </div>
 
-      <div className="grid grid-cols-6 sm:grid-cols-12 gap-2 p-4 bg-garden-earth/20 rounded-lg border border-border/30">
-        {monthNames.map((monthName, index) => {
-          const stats = getMonthStats(index);
-          const isCurrentMonth = index === currentMonth;
-          
+      {/* Monthly Summary Grid (compact) */}
+      <div className="mb-4 grid grid-cols-3 sm:grid-cols-6 lg:grid-cols-12 gap-2">
+        {monthNames.map((name, idx) => {
+          const stats = getMonthStats(idx);
+          const isActive = idx === currentMonth;
           return (
             <button
-              key={index}
-              onClick={() => onMonthSelect(index)}
+              key={idx}
+              onClick={() => onMonthSelect(idx)}
               className={cn(
-                "relative aspect-square rounded-md transition-all duration-300",
-                "flex flex-col items-center justify-center p-2",
-                "hover:scale-105 hover:shadow-lg cursor-pointer",
-                getMonthColor(index),
-                isCurrentMonth && "ring-2 ring-focus-ring ring-offset-2 ring-offset-background",
-                "group"
+                'relative rounded-md p-2 text-left border border-border/40 transition-all',
+                'hover:shadow-lg hover:scale-[1.01] focus:outline-none focus:ring-2 focus:ring-focus-ring',
+                getMonthColor(idx),
+                isActive && 'ring-2 ring-focus-ring ring-offset-2 ring-offset-background'
               )}
-              title={`${monthName}: ${stats.completed}/${stats.daysInMonth} completed`}
+              title={`${name}: ${stats.completed}/${stats.daysInMonth} completed`}
             >
-              {/* Month Label */}
-              <span className={cn(
-                "text-xs font-medium mb-1",
-                stats.completed > stats.daysInMonth * 0.5 ? "text-garden-earth" : "text-foreground"
-              )}>
-                {monthName}
-              </span>
-
-              {/* Completion Indicator */}
-              <div className="flex flex-col items-center">
-                <div className={cn(
-                  "text-lg font-bold",
-                  stats.completed > stats.daysInMonth * 0.5 ? "text-garden-earth" : "text-foreground"
-                )}>
-                  {stats.completed}
-                </div>
-                
-                {/* Progress Dots */}
-                <div className="flex space-x-0.5 mt-1">
-                  {[...Array(4)].map((_, i) => (
-                    <div
-                      key={i}
-                      className={cn(
-                        "w-1 h-1 rounded-full",
-                        i < Math.ceil((stats.completed / stats.daysInMonth) * 4)
-                          ? "bg-autumn-gold"
-                          : stats.completed > stats.daysInMonth * 0.5 
-                            ? "bg-garden-earth/40" 
-                            : "bg-muted-foreground/40"
-                      )}
-                    />
-                  ))}
-                </div>
+              <div className="flex items-center justify-between">
+                <span className={cn('text-xs font-medium', stats.completed > stats.daysInMonth * 0.5 ? 'text-garden-earth' : 'text-foreground')}>{name}</span>
+                <span className={cn('text-xs font-bold', stats.completed > stats.daysInMonth * 0.5 ? 'text-garden-earth' : 'text-foreground')}>{stats.completed}</span>
               </div>
-
-              {/* Hover Tooltip */}
-              <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-card text-card-foreground text-xs rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10">
-                {stats.completed}/{stats.daysInMonth} days completed
+              <div className="flex space-x-0.5 mt-1">
+                {[...Array(4)].map((_, i) => (
+                  <span
+                    key={i}
+                    className={cn(
+                      'w-1.5 h-1.5 rounded-full',
+                      i < Math.ceil((stats.completed / stats.daysInMonth) * 4)
+                        ? 'bg-autumn-gold'
+                        : stats.completed > stats.daysInMonth * 0.5 
+                          ? 'bg-garden-earth/40' 
+                          : 'bg-muted-foreground/40'
+                    )}
+                  />
+                ))}
               </div>
             </button>
           );
         })}
+      </div>
+
+      {/* Year heatmap */}
+      <div className="p-4 bg-garden-earth/20 rounded-lg border border-border/30">
+        <YearGrid year={year} allPlans={allPlans} />
       </div>
 
       {/* Year Summary */}

@@ -201,6 +201,23 @@ All colors in HSL format for optimal theming
     animation: particleFloat 2.5s ease-in-out infinite 0.5s;
   }
 
+  /* Shared calendar grid to keep header/body aligned */
+  .calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
+  .calendar-week-header {
+    gap: 0.5rem; /* gap-2 */
+  }
+  @media (max-width: 768px) {
+    .calendar-grid {
+      grid-template-columns: repeat(7, minmax(40px, 1fr));
+    }
+    .calendar-week-header {
+      gap: 0.25rem; /* gap-1 */
+    }
+  }
+
   /* Garden Grid */
   .garden-grid {
     @apply grid gap-2 p-4;

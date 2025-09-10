@@ -70,7 +70,7 @@ const MonthlyGarden: React.FC<MonthlyGardenProps> = ({
       </div>
 
       {/* Week Day Headers */}
-      <div className="grid grid-cols-7 gap-2 mb-2 px-4">
+      <div className="calendar-grid calendar-week-header mb-2 px-4">
         {weekDays.map(day => (
           <div 
             key={day} 
