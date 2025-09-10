@@ -1,6 +1,8 @@
 import React from 'react';
 import { cn, parseLocalDateKey } from '@/lib/utils';
 import GardenParcel, { Plan } from './GardenParcel';
+import { useLocale } from '@/components/LanguageSwitcher';
+import { monthNames } from '@/constants/i18n';
 
 interface MonthlyGardenProps {
   year: number;
@@ -23,6 +25,8 @@ const MonthlyGarden: React.FC<MonthlyGardenProps> = ({
 }) => {
   const currentDate = new Date();
   const isCurrentMonth = currentDate.getFullYear() === year && currentDate.getMonth() === month;
+  const { locale } = useLocale();
+  const mNames = monthNames(locale);
   
   // Generate calendar grid
   const firstDay = new Date(year, month, 1);
@@ -52,19 +56,16 @@ const MonthlyGarden: React.FC<MonthlyGardenProps> = ({
     });
   };
 
-  const monthNames = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
-  ];
-
   const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+  const monthHeader = locale === 'ko' ? `${year}년 ${month + 1}월` : `${mNames[month]} ${year}`;
 
   return (
     <div className={cn("w-full max-w-4xl mx-auto", className)}>
       {/* Month Header */}
       <div className="text-center mb-6">
         <h2 className="text-3xl font-bold text-foreground mb-2">
-          {monthNames[month]} {year}
+          {monthHeader}
         </h2>
         <p className="text-muted-foreground">
           Plant your daily seeds and watch your garden grow

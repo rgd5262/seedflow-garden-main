@@ -48,6 +48,10 @@ const GardenNavigation: React.FC<GardenNavigationProps> = ({
     onMonthChange(now.getMonth(), now.getFullYear());
   };
 
+  const monthYearLabel = locale === 'ko'
+    ? `${currentYear}년 ${currentMonth + 1}월`
+    : `${mNames[currentMonth]} ${currentYear}`;
+
   return (
     <nav className={cn("garden-nav", className)}>
       <div className="container mx-auto px-4 py-4">
@@ -78,7 +82,7 @@ const GardenNavigation: React.FC<GardenNavigationProps> = ({
                 </span>
               ) : (
                 <span className="text-lg font-semibold text-foreground">
-                  {mNames[currentMonth]} {currentYear}
+                  {monthYearLabel}
                 </span>
               )}
             </div>
