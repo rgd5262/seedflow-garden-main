@@ -2,7 +2,7 @@ import React from 'react';
 import { cn, parseLocalDateKey } from '@/lib/utils';
 import GardenParcel, { Plan } from './GardenParcel';
 import { useLocale } from '@/components/LanguageSwitcher';
-import { monthNames } from '@/constants/i18n';
+import { monthNames, STRINGS, type Locale } from '@/constants/i18n';
 
 interface MonthlyGardenProps {
   year: number;
@@ -27,6 +27,7 @@ const MonthlyGarden: React.FC<MonthlyGardenProps> = ({
   const isCurrentMonth = currentDate.getFullYear() === year && currentDate.getMonth() === month;
   const { locale } = useLocale();
   const mNames = monthNames(locale);
+  const S = STRINGS[locale as Locale];
   
   // Generate calendar grid
   const firstDay = new Date(year, month, 1);
@@ -68,7 +69,7 @@ const MonthlyGarden: React.FC<MonthlyGardenProps> = ({
           {monthHeader}
         </h2>
         <p className="text-muted-foreground">
-          Plant your daily seeds and watch your garden grow
+          {S.monthly_header_subtitle}
         </p>
       </div>
 
@@ -110,19 +111,19 @@ const MonthlyGarden: React.FC<MonthlyGardenProps> = ({
           <div className="text-2xl font-bold text-plant-growing">
             {plans.filter(p => p.state === 'planted').length}
           </div>
-          <div className="text-muted-foreground">Seeds Planted</div>
+          <div className="text-muted-foreground">{S.monthly_stats_planted}</div>
         </div>
         <div className="text-center">
           <div className="text-2xl font-bold text-plant-bloomed">
             {plans.filter(p => p.state === 'completed').length}
           </div>
-          <div className="text-muted-foreground">Plants Grown</div>
+          <div className="text-muted-foreground">{S.monthly_stats_grown}</div>
         </div>
         <div className="text-center">
           <div className="text-2xl font-bold text-autumn-gold">
             {Math.round((plans.filter(p => p.state === 'completed').length / daysInMonth) * 100)}%
           </div>
-          <div className="text-muted-foreground">Completion</div>
+          <div className="text-muted-foreground">{S.monthly_stats_completion}</div>
         </div>
       </div>
     </div>
