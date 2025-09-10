@@ -1,5 +1,5 @@
 import React from 'react';
-import { cn } from '@/lib/utils';
+import { cn, parseLocalDateKey } from '@/lib/utils';
 import GardenParcel, { Plan } from './GardenParcel';
 
 interface MonthlyGardenProps {
@@ -45,7 +45,7 @@ const MonthlyGarden: React.FC<MonthlyGardenProps> = ({
 
   const getPlanForDate = (date: number): Plan | undefined => {
     return plans.find(plan => {
-      const planDate = new Date(plan.date);
+      const planDate = parseLocalDateKey(plan.date);
       return planDate.getDate() === date && 
              planDate.getMonth() === month && 
              planDate.getFullYear() === year;

@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { cn, toIsoDateKey } from '@/lib/utils';
+import { cn, formatLocalDateKey } from '@/lib/utils';
 import { Plan } from '@/components/GardenParcel';
 
 interface YearGridProps {
@@ -15,7 +15,7 @@ function getMonthAbbr(monthIndex: number): string {
 }
 
 export const YearGrid: React.FC<YearGridProps> = ({ year, allPlans, className, onMonthSelect }) => {
-  // Map dateKey -> state/title for O(1) lookup
+  // Map local dateKey -> state/title for O(1) lookup
   const stateByDate = useMemo(() => {
     const map = new Map<string, { state: Plan['state']; title: string }>();
     for (const plan of allPlans) {
@@ -71,7 +71,7 @@ export const YearGrid: React.FC<YearGridProps> = ({ year, allPlans, className, o
 
   const getCellClass = (date: Date | null): string => {
     if (!date) return 'bg-transparent';
-    const dateKey = toIsoDateKey(date);
+    const dateKey = formatLocalDateKey(date);
     const info = stateByDate.get(dateKey);
     if (!info) return 'bg-seed-dormant/40';
     if (info.state === 'completed') return 'bg-plant-bloomed';
@@ -81,7 +81,7 @@ export const YearGrid: React.FC<YearGridProps> = ({ year, allPlans, className, o
 
   const getTitle = (date: Date | null): string => {
     if (!date) return '';
-    const dateKey = toIsoDateKey(date);
+    const dateKey = formatLocalDateKey(date);
     const info = stateByDate.get(dateKey);
     if (!info) return `${dateKey} • empty`;
     return `${dateKey} • ${info.state}${info.title ? ` • ${info.title}` : ''}`;

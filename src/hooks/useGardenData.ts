@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Plan } from '@/components/GardenParcel';
+import { formatLocalDateKey } from '@/lib/utils';
 
 const STORAGE_KEY = 'garden-plans';
 
@@ -30,7 +31,7 @@ export const useGardenData = () => {
 
   const plantSeed = (year: number, month: number, date: number, title: string, description: string = '') => {
     const planDate = new Date(year, month, date);
-    const dateString = planDate.toISOString().split('T')[0];
+    const dateString = formatLocalDateKey(planDate);
     
     // Check if a plan already exists for this date
     const existingPlan = plans.find(plan => plan.date === dateString);

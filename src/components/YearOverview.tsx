@@ -1,5 +1,5 @@
 import React from 'react';
-import { cn } from '@/lib/utils';
+import { cn, parseLocalDateKey } from '@/lib/utils';
 import { Plan } from './GardenParcel';
 import YearGrid from './YearGrid';
 
@@ -25,7 +25,7 @@ const YearOverview: React.FC<YearOverviewProps> = ({
 
   const getMonthStats = (month: number) => {
     const monthPlans = allPlans.filter(plan => {
-      const planDate = new Date(plan.date);
+      const planDate = parseLocalDateKey(plan.date);
       return planDate.getMonth() === month && planDate.getFullYear() === year;
     });
 
